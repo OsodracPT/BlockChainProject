@@ -45,13 +45,29 @@ class Blockchain{
             if(currentBlock.previousHash !== previousBlock.hash){
                 return false;
             }
+
+            if (previousBlock.index + 1 !== newBlock.index) {
+                console.log('invalid index');
+                return false;
+            } else if (previousBlock.hash !== newBlock.previousHash) {
+                console.log('invalid previoushash');
+                return false;
+            } else if (calculateHashForBlock(newBlock) !== newBlock.hash) {
+                console.log('invalid hash: ' + calculateHashForBlock(newBlock) + ' ' + newBlock.hash);
+                return false;
+            }
         }
         return true;
     }
+    
 }
 
 let osodracCoin = new Blockchain();
 osodracCoin.addBlock(new Block(1,"30/01/2018", {amount:4}));
-osodracCoin.addBlock(new Block(1,"25/04/2018", {amount:10}));
+osodracCoin.addBlock(new Block(2,"25/04/2018", {amount:10}));
 
+console.log('Is the BlockChain Valid?'+ osodracCoin.isChainValid());
+
+osodracCoin.chain[1].data = { amount: 100 };
+osodracCoin.chain[1].hash = osodracCoin.chain[1].calculateHash();
 console.log('Is the BlockChain Valid?'+ osodracCoin.isChainValid());
