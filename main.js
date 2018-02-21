@@ -1,4 +1,4 @@
-const SHA256 = require('crypto-js/sha256')
+const SHA256 = require('crypto-js/sha256');
 
 class Block{
     constructor(index, timestamp, data, previousHash = ''){
@@ -6,7 +6,7 @@ class Block{
         this.timestamp=timestamp;
         this.data = data;
         this.previousHash = previousHash;
-        this.hash='';
+        this.hash=this.calculateHash();
     }
 
     calculateHash(){
@@ -34,7 +34,7 @@ class Blockchain{
     }
 
     isChainValid(){
-        for(let i = 1; i < this.chain.lenght; i++){
+        for(let i = 1; i < this.chain.length; i++){
             const currentBlock = this.chain[i];
             const previousBlock = this.chain[i-1];
 
@@ -43,17 +43,6 @@ class Blockchain{
             }
 
             if(currentBlock.previousHash !== previousBlock.hash){
-                return false;
-            }
-
-            if (previousBlock.index + 1 !== newBlock.index) {
-                console.log('invalid index');
-                return false;
-            } else if (previousBlock.hash !== newBlock.previousHash) {
-                console.log('invalid previoushash');
-                return false;
-            } else if (calculateHashForBlock(newBlock) !== newBlock.hash) {
-                console.log('invalid hash: ' + calculateHashForBlock(newBlock) + ' ' + newBlock.hash);
                 return false;
             }
         }
